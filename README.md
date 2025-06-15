@@ -252,7 +252,6 @@ TISSUE_CONTEXT <- "your tissue description"  # Must match!
 | `hierarchical_annotation_clean.R` | 5-run annotation pipeline | 10X data | `consensus_annotations_*.csv` |
 | `consensus_decision_and_update.R` | Consensus analysis & Seurat update | Consensus CSV | `final_annotations.csv`, `pbmc_final_annotated.rds` |
 | `chatgpt_consensus_prompt.txt` | ChatGPT prompt template | - | Text prompt |
-| `test_cleaning.R` | Test annotation cleaning | - | Console output |
 
 ### 📊 Metadata Added to Seurat Object
 
@@ -303,25 +302,6 @@ CONSENSUS_CSV <- "consensus_annotations_20250615_161251.csv"  # Use actual filen
 Lymphocytes 1, T cells 2, etc.
 ```
 **Solution:** The cleaning functions automatically handle this! ✅
-
-### 🧪 Testing Your Setup
-
-Test the cleaning functionality:
-```bash
-Rscript test_cleaning.R
-```
-
-Expected output:
-```
-🧪 TESTING ANNOTATION CLEANING FUNCTION
-========================================
-Original → Cleaned
-──────────────────────────────
-'T cells 1'         → 'T cells'
-'Lymphocytes 2'     → 'Lymphocytes'
-'B cells 3'         → 'B cells'
-✅ All numbered annotations have been cleaned!
-```
 
 ---
 
