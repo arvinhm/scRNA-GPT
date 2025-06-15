@@ -28,7 +28,7 @@ This pipeline performs **robust cell type annotation** for single-cell RNA-seq d
 
 1. **Running 5 independent annotation iterations** with slight parameter variations
 2. **Analyzing consensus** across all runs to determine final cell types
-3. **Cleaning annotations** (removing numbers, artifacts)
+3. **Cleaning and validating annotations**
 4. **Updating Seurat objects** with final consensus annotations
 
 The pipeline is **tissue-agnostic** and can be easily adapted for any single-cell dataset.
