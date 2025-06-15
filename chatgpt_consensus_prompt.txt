@@ -1,0 +1,70 @@
+CONSENSUS CELL TYPE ANNOTATION PROMPT FOR ChatGPT
+====================================================
+
+I have single-cell RNA-seq data with cell type annotations from 5 independent runs. I need you to analyze the consensus and determine the final annotation for each cell.
+
+**CONTEXT:**
+- Data source: [MODIFY: e.g., "human PBMC peripheral blood mononuclear cells"]
+- CSV format: Cell_Barcode, Coarse_Run_1, Coarse_Run_2, Coarse_Run_3, Coarse_Run_4, Coarse_Run_5, Fine_Run_1, Fine_Run_2, Fine_Run_3, Fine_Run_4, Fine_Run_5
+
+**DECISION RULES (apply in order):**
+
+1. **MAJORITY CONSENSUS (≥3/5):** If 3+ runs agree → use that annotation
+   - Example: T cells, T cells, T cells, NK cells, B cells → Final: T cells
+
+2. **BIOLOGICAL SIMILARITY:** If related but not identical → use common ancestor
+   - Example: CD4+ T cells, CD8+ T cells, T cells, Helper T cells, T cells → Final: T cells
+   - Example: Classical Monocytes, Non-classical Monocytes, Monocytes → Final: Monocytes
+
+3. **QUALITY FILTER:** Avoid technical artifacts, gene names, or NUMBERS
+   - Reject: "Ribosomal protein", "Unknown cluster 5", "T cells 1", "Lymphocytes 2", obvious errors
+   - Remove: ALL numbered suffixes (e.g., "B cells 1" → "B cells")
+   - Prefer: established cell types for your tissue
+
+4. **CONSERVATIVE CHOICE:** When uncertain → use broader category or "Unknown"
+   - If completely contradictory → "Unknown"
+   - NEVER use numbers in final annotations
+
+**OUTPUT FORMAT:**
+Create a CSV with exactly these columns:
+```
+barcode,coarse,fine
+AAACATACAACCAC-1,T cells,T cells
+AAACATTGAGCTAC-1,B cells,B cells
+AAACGCTTCTCTGTAT-1,Unknown,Unknown
+```
+
+**ANALYSIS INSTRUCTIONS:**
+1. Upload the consensus CSV file
+2. For each cell, analyze both coarse and fine annotations across 5 runs
+3. Apply decision rules systematically
+4. Create the final barcode,coarse,fine CSV
+5. Provide a brief summary of consensus patterns
+
+**EXPECTED CELL TYPES for [TISSUE]:**
+[MODIFY based on your tissue - examples below for PBMC:]
+- T cells (CD4+, CD8+, regulatory, memory, naive)
+- B cells (naive, memory, plasma cells)  
+- NK cells (CD56dim, CD56bright)
+- Monocytes (classical, intermediate, non-classical)
+- Dendritic cells (myeloid, plasmacytoid)
+- Other tissue-specific types
+
+**EXAMPLE DECISION PROCESS:**
+
+Cell: AAACATACAACCAC-1
+- Coarse: T cells, T cells, Lymphocytes, T cells, T cells (4/5 → T cells)
+- Fine: CD4+ T cells, CD8+ T cells, T cells, CD4+ T cells, T cells (mixed → T cells)
+- Final: T cells, T cells
+
+Cell: AAACATTGAGCTAC-1
+- Coarse: B cells 1, B cells 2, B cells, B cells 1, B cells (clean numbers → B cells)
+- Fine: Lymphocytes 1, B cells 2, B cells, Naive B cells, B cells (majority B cells → B cells)
+- Final: B cells, B cells
+
+Cell: AAACGCTTCTCTGTAT-1  
+- Coarse: NK cells, T cells, Monocytes, B cells, Dendritic cells (no consensus)
+- Fine: NK cells, CD8+ T cells, Classical Monocytes, Naive B cells, Myeloid DC (no consensus)
+- Final: Unknown, Unknown
+
+Please analyze my consensus file and provide the final barcode,coarse,fine CSV. 
